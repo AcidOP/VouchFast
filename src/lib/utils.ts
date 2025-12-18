@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -5,7 +6,16 @@ import type { ClassValue } from 'clsx';
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
-export const downloadJson = (data: any, filename: string = 'data.json') => {
+// Create a JSON type definition without the any type
+type JsonData =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonData[]
+  | { [key: string]: JsonData };
+
+export const downloadJson = (data: JsonData, filename: string = 'data.json') => {
   // Convert the data to a JSON string
   let jsonString = JSON.stringify(data, null, 2);
 

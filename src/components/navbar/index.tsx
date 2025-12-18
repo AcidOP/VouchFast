@@ -3,7 +3,6 @@ import Link from 'next/link';
 // import AuthenticatedNavActions from './authenticated-navactions';
 import HomepageLinks from './homepage-links';
 
-import { cn } from '@/lib/utils';
 
 // import { grotesque } from '@/components/font/grotesque';
 

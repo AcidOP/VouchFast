@@ -6,6 +6,8 @@ import Image from 'next/image';
 import leafSvg from '@/assets/leaf.svg';
 import starSvg from '@/assets/star.svg';
 
+import type { StaticImageData } from 'next/image';
+
 const Doodles = () => {
   return (
     <>
@@ -16,7 +18,7 @@ const Doodles = () => {
         className='absolute -bottom-1/4 left-0 -z-10 h-37.5 w-37.5 lg:bottom-0 lg:h-75 lg:w-75'
       >
         <Image
-          src={starSvg}
+          src={starSvg as StaticImageData}
           width={300}
           height={300}
           alt='doodle'
@@ -31,7 +33,7 @@ const Doodles = () => {
         className='absolute right-5 bottom-0 -z-10 h-25 w-25 rotate-45 lg:top-0 lg:right-20 lg:h-45 lg:w-45'
       >
         <Image
-          src={leafSvg}
+          src={leafSvg as StaticImageData}
           width={300}
           height={300}
           alt='doodle'

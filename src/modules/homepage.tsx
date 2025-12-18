@@ -7,9 +7,9 @@ import Doodles from './doodles';
 import doubleArrow from '@/assets/double-arrow.svg';
 import heroSvg from '@/assets/hero.svg';
 
-import Highlight from '@/components/highlight';
-
 import Button from '@/components/ui/button';
+
+import type { StaticImageData } from 'next/image';
 
 const Homepage = () => {
   return (
@@ -18,7 +18,7 @@ const Homepage = () => {
 
       <div className='layout relative'>
         <Image
-          src={heroSvg}
+          src={heroSvg as StaticImageData}
           width={30}
           height={30}
           alt='doodle'
@@ -45,7 +45,12 @@ const Homepage = () => {
         <Link href='/auth'>
           <Button className='absolute left-1/2 mt-10 -translate-x-1/2 gap-2 rounded-full px-7 py-4 text-2xl md:mt-5'>
             Get Started
-            <Image src={doubleArrow} height={20} width={20} alt='doodle' />
+            <Image
+              src={doubleArrow as StaticImageData}
+              height={20}
+              width={20}
+              alt='doodle'
+            />
           </Button>
         </Link>
       </div>

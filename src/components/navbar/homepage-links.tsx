@@ -7,6 +7,8 @@ import doubleArrow from '@/assets/double-arrow.svg';
 
 import Button from '@/components/ui/button';
 
+import type { StaticImageData } from 'next/image';
+
 const HomepageLinks = async () => {
   return (
     <div className='flex items-center'>
@@ -29,7 +31,12 @@ const HomepageLinks = async () => {
         <Link href='/auth'>
           <Button className='gap-2'>
             Get Started
-            <Image src={doubleArrow} height={20} width={20} alt='doodle' />
+            <Image
+              src={doubleArrow as StaticImageData}
+              height={20}
+              width={20}
+              alt='doodle'
+            />
           </Button>
         </Link>
       </section>
