@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
     compilationMode: 'annotation',
   },
   allowedDevOrigins: ['localhost', '192.168.*.*'],
+  productionBrowserSourceMaps: true,
 };
 
 export default nextConfig;
