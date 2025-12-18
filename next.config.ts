@@ -1,10 +1,10 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   reactCompiler: {
-    compilationMode: "annotation",
+    compilationMode: 'annotation',
   },
-  allowedDevOrigins: ["localhost", "192.168.*.*"],
+  allowedDevOrigins: ['localhost', '192.168.*.*'],
 };
 
 export default nextConfig;
