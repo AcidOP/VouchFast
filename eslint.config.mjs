@@ -13,6 +13,19 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    rules: {
+      "no-var": "error",
+      "no-unused-vars": "warn",
+      "no-empty": "error",
+      "no-empty-function": "warn",
+      "dot-notation": "error",
+      "semi-style": "warn",
+      // React specific
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;
