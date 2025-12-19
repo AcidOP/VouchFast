@@ -29,7 +29,7 @@ const Homepage = () => {
           One-stop platform
         </h2>
 
-        <h1 className='mx-auto mt-4 max-w-6xl text-center text-5xl font-black lg:mt-6 lg:text-8xl'>
+        <h1 className='font-brico mx-auto mt-4 max-w-6xl text-center text-5xl font-black lg:mt-6 lg:text-8xl'>
           Your{' '}
           <RoughNotation type='highlight' iterations={1} color='#22c55e' show>
             <span className='text-background px-2'>ultimate</span>

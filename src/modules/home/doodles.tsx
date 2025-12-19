@@ -22,7 +22,7 @@ const Doodles = () => {
           width={300}
           height={300}
           alt='doodle'
-          className='animation-duration-4500 animate-spin opacity-20 lg:opacity-30'
+          className='animation-duration-8000 animate-spin opacity-20 lg:opacity-30'
         />
       </motion.div>
 
@@ -37,7 +37,7 @@ const Doodles = () => {
           width={300}
           height={300}
           alt='doodle'
-          className='animation-duration-5000 animate-spin opacity-20 lg:opacity-30'
+          className='animation-duration-9000 animate-spin opacity-20 lg:opacity-30'
         />
       </motion.div>
     </>
