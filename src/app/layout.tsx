@@ -1,17 +1,21 @@
 import '@/styles/globals.css';
 
+import { cn } from '@/lib/utils';
+
+import { grotesque, jakarta } from '@/components/fonts';
 import Navbar from '@/components/navbar';
 
 import type { ReactNode } from 'react';
 
-interface RootLayoutProps {
-  children: ReactNode;
-}
+type RootLayoutProps = Readonly<{ children: ReactNode }>;
 
-const RootLayout = ({ children }: Readonly<RootLayoutProps>) => {
+const RootLayout = ({ children }: RootLayoutProps) => {
   return (
     <html lang='en'>
-      <body className={`antialiased`}>
+      <body
+        className={cn(jakarta.variable, grotesque.variable, 'antialiased')}
+        suppressHydrationWarning
+      >
         <Navbar />
         {children}
       </body>
