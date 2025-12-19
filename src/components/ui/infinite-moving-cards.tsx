@@ -60,12 +60,13 @@ const InfiniteMovingCards = ({
 
   const getSpeed = () => {
     if (containerRef.current) {
+      const duration = '--animation-duration';
       if (speed === 'fast') {
-        containerRef.current.style.setProperty('--animation-duration', '20s');
+        containerRef.current.style.setProperty(duration, '20s');
       } else if (speed === 'normal') {
-        containerRef.current.style.setProperty('--animation-duration', '40s');
+        containerRef.current.style.setProperty(duration, '40s');
       } else {
-        containerRef.current.style.setProperty('--animation-duration', '80s');
+        containerRef.current.style.setProperty(duration, '80s');
       }
     }
   };
@@ -74,7 +75,7 @@ const InfiniteMovingCards = ({
     <div
       ref={containerRef}
       className={cn(
-        'scroller relative z-20 max-w-7xl overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]',
+        'scroller relative z-20 max-w-7xl overflow-hidden mask-[linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]',
         className,
       )}
     >
@@ -83,18 +84,18 @@ const InfiniteMovingCards = ({
         className={cn(
           'flex w-max min-w-full shrink-0 flex-nowrap gap-4 py-2',
           start && 'animate-scroll',
-          pauseOnHover && 'hover:[animation-play-state:paused]',
+          pauseOnHover && 'hover:paused',
         )}
       >
         {items.map(item => (
           <li
-            className='flex w-full max-w-[21rem] flex-shrink-0 rounded-2xl bg-zinc-800 p-4 lg:max-w-sm'
+            className='flex w-full max-w-84 shrink-0 rounded-2xl bg-zinc-800 p-4 lg:max-w-sm'
             key={item.name}
           >
             <section className='flex w-full flex-col justify-between'>
               <div
                 aria-hidden='true'
-                className='user-select-none pointer-events-none absolute -top-0.5 -left-0.5 -z-1 h-[calc(100%_+_4px)] w-[calc(100%_+_4px)]'
+                className='user-select-none pointer-events-none absolute -top-0.5 -left-0.5 -z-1 h-[calc(100%+4px)] w-[calc(100%+4px)]'
               ></div>
               <div className='relative z-20 text-xs leading-[1.6] font-bold text-gray-300 lg:text-sm'>
                 {item.quote}
