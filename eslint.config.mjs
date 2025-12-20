@@ -20,7 +20,7 @@ export default defineConfig([
   globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts']),
 
   // --------------------------------------------------
-  // Strict correctness layer
+  // Global strict correctness (client + server)
   // --------------------------------------------------
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
@@ -46,7 +46,6 @@ export default defineConfig([
       'no-var': 'error',
       'no-empty': 'error',
       'no-empty-function': 'warn',
-      'no-unused-vars': 'off',
       'dot-notation': 'error',
       'semi-style': 'warn',
       'no-process-env': 'error',
@@ -62,23 +61,13 @@ export default defineConfig([
       'react/prop-types': 'off',
 
       // =====================================================
-      // 1. HOOK SAFETY
+      // HOOK SAFETY
       // =====================================================
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'error',
 
       // =====================================================
-      // 2. SERVER / CLIENT BOUNDARY (RSC)
-      // =====================================================
-      'no-restricted-globals': [
-        'error',
-        { name: 'window', message: '❌ window is client-only' },
-        { name: 'document', message: '❌ document is client-only' },
-        { name: 'localStorage', message: '❌ localStorage is client-only' },
-      ],
-
-      // =====================================================
-      // 3. UNSAFE TS PATTERNS
+      // UNSAFE TS PATTERNS
       // =====================================================
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/no-misused-promises': 'error',
@@ -101,7 +90,7 @@ export default defineConfig([
       'promise/catch-or-return': 'error',
 
       // =====================================================
-      // 4. ACCIDENTAL COMPLEXITY
+      // ACCIDENTAL COMPLEXITY
       // =====================================================
       'sonarjs/cognitive-complexity': ['warn', 15],
       'sonarjs/no-identical-functions': 'warn',
@@ -111,7 +100,7 @@ export default defineConfig([
       complexity: ['warn', 10],
 
       // =====================================================
-      // 5. IMPORT HYGIENE (STRUCTURAL ONLY)
+      // IMPORT HYGIENE
       // =====================================================
       'import/no-cycle': 'error',
       'import/no-self-import': 'error',
@@ -131,10 +120,26 @@ export default defineConfig([
       ],
 
       // =====================================================
-      // 6. ACCESSIBILITY
+      // ACCESSIBILITY
       // =====================================================
       'jsx-a11y/alt-text': 'warn',
       'jsx-a11y/anchor-is-valid': 'warn',
+    },
+  },
+
+  // --------------------------------------------------
+  // SERVER COMPONENT SAFETY (RSC)
+  // --------------------------------------------------
+  {
+    files: ['app/**/*.{ts,tsx}'],
+    ignores: ['**/*.client.ts', '**/*.client.tsx'],
+    rules: {
+      'no-restricted-globals': [
+        'error',
+        { name: 'window', message: '❌ window is client-only' },
+        { name: 'document', message: '❌ document is client-only' },
+        { name: 'localStorage', message: '❌ localStorage is client-only' },
+      ],
     },
   },
 ]);
