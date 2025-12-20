@@ -24,20 +24,17 @@ const uses = [
   {
     heading: 'Freelancers',
     description: 'Collect more testimonials to make more money 💰',
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     Icon: SiFreelancer,
   },
   {
     heading: 'Agencies',
     description: 'Streamline testimonial collection and approval across teams.',
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     Icon: MdAddBusiness,
   },
   {
     heading: 'SaaS Founders',
     description:
       'Automate gathering customer feedback and build trust with potential users.',
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     Icon: RiLightbulbFlashLine,
   },
 ];
