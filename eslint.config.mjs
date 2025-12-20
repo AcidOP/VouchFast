@@ -49,6 +49,7 @@ export default defineConfig([
       'no-unused-vars': 'off',
       'dot-notation': 'error',
       'semi-style': 'warn',
+      'no-process-env': 'error',
       eqeqeq: ['error', 'always'],
       'no-debugger': 'error',
       'no-fallthrough': 'error',
