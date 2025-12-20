@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-globals */
+ 
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
