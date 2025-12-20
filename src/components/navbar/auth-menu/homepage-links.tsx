@@ -9,7 +9,7 @@ import Button from '@/components/ui/button';
 
 import type { StaticImageData } from 'next/image';
 
-const HomepageLinks = async () => {
+const HomepageLinks = () => {
   return (
     <div className='flex items-center'>
       <section className='absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:block'>
@@ -22,7 +22,6 @@ const HomepageLinks = async () => {
         </ul>
       </section>
 
-      {/* {!session && ( */}
       <section className='hidden space-x-2 lg:flex'>
         <Link href='/login'>
           <Button variant='ghost'>Login</Button>
@@ -40,7 +39,6 @@ const HomepageLinks = async () => {
           </Button>
         </Link>
       </section>
-      {/* )} */}
     </div>
   );
 };

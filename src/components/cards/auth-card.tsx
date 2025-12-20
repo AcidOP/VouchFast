@@ -18,7 +18,7 @@ type AuthCardProps = {
   className?: string;
 };
 
-export default function AuthCard({ type, className }: AuthCardProps) {
+const AuthCard = ({ type, className }: AuthCardProps) => {
   const isLogin = type === 'login';
   const title = isLogin ? 'Login' : 'Signup';
   const buttonText = isLogin ? 'Login' : 'Signup';
@@ -67,4 +67,7 @@ export default function AuthCard({ type, className }: AuthCardProps) {
       </CardFooter>
     </Card>
   );
-}
+};
+AuthCard.displayName = 'AuthCard';
+
+export default AuthCard;
