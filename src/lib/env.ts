@@ -15,7 +15,10 @@ export const env = createEnv({
     NODE_ENV: z.enum(['development', 'test', 'production']),
 
     DATABASE_URL: z.string().url(),
-    JWT_SECRET: z.string().min(1),
+    AUTH_GITHUB_CLIENT_ID: z.string().min(1),
+    AUTH_GITHUB_SECRET: z.string().min(1),
+    AUTH_GOOGLE_CLIENT_ID: z.string().min(1),
+    AUTH_GOOGLE_SECRET: z.string().min(1),
   },
 
   //   Client-safe env vars: ✅ MUST start with `NEXT_PUBLIC_`
@@ -27,8 +30,11 @@ export const env = createEnv({
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     DATABASE_URL: process.env.DATABASE_URL,
-    JWT_SECRET: process.env.JWT_SECRET,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    AUTH_GITHUB_CLIENT_ID: process.env.AUTH_GITHUB_CLIENT_ID,
+    AUTH_GITHUB_SECRET: process.env.AUTH_GITHUB_SECRET,
+    AUTH_GOOGLE_CLIENT_ID: process.env.AUTH_GOOGLE_CLIENT_ID,
+    AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
   },
 
   //   Ensures empty strings fail validation

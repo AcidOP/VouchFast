@@ -117,8 +117,18 @@ export default defineConfig([
       'import/no-self-import': 'error',
       'import/no-duplicates': 'error',
 
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+
       'unused-imports/no-unused-imports': 'error',
-      'unused-imports/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'unused-imports/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
 
       // =====================================================
       // 6. ACCESSIBILITY
