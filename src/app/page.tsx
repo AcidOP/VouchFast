@@ -8,6 +8,8 @@ import ProductBox from '@/modules/product-desc';
 import Consequences from '@/modules/purpose/problem-box';
 import Testimonials from '@/modules/testimonials';
 
+export const dynamic = 'force-static';
+
 const Index = () => {
   return (
     <>

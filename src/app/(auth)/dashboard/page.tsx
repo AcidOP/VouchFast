@@ -5,6 +5,8 @@ import getUser from '@/actions/auth.user';
 import DashboardOverview from '@/components/dashboard/overview';
 import Container from '@/components/layout/container';
 
+export const dynamic = 'force-dynamic';
+
 const DashboardPage = async () => {
   const user = await getUser();
   if (!user) redirect('/login');
