@@ -1,4 +1,3 @@
-// Make sure to install the 'pg' package
 import * as schema from '@/drizzle/schema';
 import { drizzle } from 'drizzle-orm/node-postgres';
 
