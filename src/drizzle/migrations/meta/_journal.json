@@ -15,6 +15,13 @@
       "when": 1766315535343,
       "tag": "0001_sour_micromacro",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1766334051583,
+      "tag": "0002_foamy_owl",
+      "breakpoints": true
     }
   ]
 }

@@ -1,5 +1,16 @@
 import { relations } from 'drizzle-orm';
-import { boolean, index, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  index,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+} from 'drizzle-orm/pg-core';
+
+export const PLANS = { FREE: 'FREE', PAID: 'PAID' } as const;
+export type Plan = (typeof PLANS)[keyof typeof PLANS];
+export const planEnum = pgEnum('plan_enum', PLANS);
 
 export const user = pgTable('user', {
   id: text('id').primaryKey(),
@@ -7,6 +18,7 @@ export const user = pgTable('user', {
   email: text('email').notNull().unique(),
   emailVerified: boolean('email_verified').default(false).notNull(),
   image: text('image'),
+  plan: planEnum('plan').default('FREE').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at')
     .defaultNow()

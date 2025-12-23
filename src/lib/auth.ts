@@ -1,6 +1,8 @@
 import { db } from '@/drizzle/db';
+import { PLANS } from '@/drizzle/schema';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
+import { inferAdditionalFields } from 'better-auth/client/plugins';
 import { nextCookies } from 'better-auth/next-js';
 
 import { env } from './env';
@@ -15,13 +17,24 @@ export const auth = betterAuth({
       maxAge: 60 * 60 * 24, // cache for 1 day
     },
   },
+  user: {
+    additionalFields: {
+      plan: {
+        type: 'string',
+        input: false,
+        defaultValue: PLANS.FREE,
+      },
+    },
+  },
   plugins: [
+    inferAdditionalFields({
+      user: {
+        plan: {
+          type: 'string',
+        },
+      },
+    }),
     nextCookies(),
-    // magicLink({
-    //   sendMagicLink: async ({ email, token, url }, ctx) => {
-    //     // send email to user
-    //   },
-    // }),
   ],
   socialProviders: {
     github: {
