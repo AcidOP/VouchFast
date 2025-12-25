@@ -4,17 +4,13 @@ import type { ReactNode } from 'react';
 
 type RootLayoutProps = Readonly<{ children: ReactNode }>;
 
-const RootLayout = ({ children }: RootLayoutProps) => {
+const DashLayout = ({ children }: RootLayoutProps) => {
   return (
-    <html lang='en'>
-      <body>
-        <div className='layout mt-8 flex'>
-          <Sidebar className='w-1/4' />
-          <div className='w-3/4'>{children}</div>
-        </div>
-      </body>
-    </html>
+    <div className='layout mt-8 flex'>
+      <Sidebar className='w-1/4' />
+      <div className='w-3/4'>{children}</div>
+    </div>
   );
 };
 
-export default RootLayout;
+export default DashLayout;
