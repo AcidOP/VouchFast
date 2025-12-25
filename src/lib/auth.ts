@@ -2,7 +2,6 @@ import { db } from '@/drizzle/db';
 import { PLANS } from '@/drizzle/schema';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { inferAdditionalFields } from 'better-auth/client/plugins';
 import { nextCookies } from 'better-auth/next-js';
 
 import { env } from './env';
@@ -20,22 +19,13 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       plan: {
-        type: 'string',
+        type: Object.values(PLANS),
         input: false,
         defaultValue: PLANS.FREE,
       },
     },
   },
-  plugins: [
-    inferAdditionalFields({
-      user: {
-        plan: {
-          type: 'string',
-        },
-      },
-    }),
-    nextCookies(),
-  ],
+  plugins: [nextCookies()],
   socialProviders: {
     github: {
       clientId: env.AUTH_GITHUB_CLIENT_ID,

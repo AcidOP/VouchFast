@@ -1,13 +1,7 @@
-import { Plus } from 'lucide-react';
-import Link from 'next/link';
-
-import OverviewCard from './overview-card';
-
-import { cn } from '@/lib/utils';
+import RenderLists from './render-lists';
 
 import Heading from '@/components/dashboard-heading';
-
-import Button from '@/components/ui/button';
+import CreateListButton from '@/components/dashboard/create-list-btn';
 
 type List = {
   id: string;
@@ -41,37 +35,6 @@ const UserLists = async ({ lists }: IProps) => {
 
       {!noLists && <RenderLists lists={lists} />}
     </>
-  );
-};
-
-const CreateListButton = () => (
-  <Link href='/dashboard/lists/new'>
-    <Button className='mt-4 flex gap-3 rounded'>
-      <Plus /> Create new List
-    </Button>
-  </Link>
-);
-
-const RenderLists = ({ lists, className }: IProps) => {
-  return (
-    <div className={cn('grid gap-6 lg:grid-cols-3', className)}>
-      {lists.map(list => {
-        return (
-          <OverviewCard
-            key={list.id}
-            title={list.name}
-            link={`/dashboard/lists/${list.id}`}
-          >
-            <div className='flex h-min items-center justify-between'>
-              Items: {list.testimonialCount || 0}
-              <Button size='sm' className='z-50'>
-                View
-              </Button>
-            </div>
-          </OverviewCard>
-        );
-      })}
-    </div>
   );
 };
 

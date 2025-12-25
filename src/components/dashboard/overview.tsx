@@ -14,18 +14,30 @@ interface IProps {
   className?: string;
 }
 
-const DashboardOverview = async ({
+const PLAN_LIMITS = {
+  [PLANS.FREE]: {
+    lists: 1,
+    testimonials: 3,
+  },
+  [PLANS.PAID]: {
+    lists: 15,
+    testimonials: Infinity,
+  },
+} as const;
+
+const formatQuota = (used: number, limit: number) =>
+  limit === Infinity ? `${used}/∞` : `${used}/${limit}`;
+
+const DashboardOverview = ({
   plan,
   listCount,
   testimonialCount,
   className,
 }: IProps) => {
-  const isPremimum = plan === PLANS.PAID;
+  const limits = PLAN_LIMITS[plan];
 
-  const listQuota = isPremimum ? `${listCount}/15` : `${listCount}/1`;
-  const testimonialQuota = isPremimum
-    ? `${testimonialCount}/∞`
-    : `${testimonialCount}/3`;
+  const listQuota = formatQuota(listCount, limits.lists);
+  const testimonialQuota = formatQuota(testimonialCount, limits.testimonials);
 
   return (
     <>
@@ -33,10 +45,12 @@ const DashboardOverview = async ({
 
       <div className={cn('mt-16 grid gap-6 lg:grid-cols-3', className)}>
         <OverviewCard title='Testimonials'>{testimonialQuota}</OverviewCard>
-        <OverviewCard title='Plan' link='/pricing'>
+
+        <OverviewCard title='Plan' href='/pricing'>
           {plan}
         </OverviewCard>
-        <OverviewCard title='Lists' link='/dashboard/lists'>
+
+        <OverviewCard title='Lists' href='/dashboard/lists'>
           {listQuota}
         </OverviewCard>
       </div>

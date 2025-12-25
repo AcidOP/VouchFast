@@ -6,13 +6,13 @@ import type { ReactNode } from 'react';
 
 interface OverviewCardProps {
   title: string;
+  href?: string;
   children?: ReactNode;
-  link?: string;
 }
 
-const OverviewCard = ({ title, children, link }: OverviewCardProps) => {
+const OverviewCard = ({ title, children, href }: OverviewCardProps) => {
   const CardComponent = (
-    <Card className={'bg-neutral-900 transition-shadow hover:shadow-md'}>
+    <Card className='bg-neutral-900 transition-shadow hover:shadow-md'>
       <CardHeader>
         <CardTitle className='text-lg'>{title}</CardTitle>
       </CardHeader>
@@ -20,14 +20,13 @@ const OverviewCard = ({ title, children, link }: OverviewCardProps) => {
     </Card>
   );
 
-  if (link) {
+  if (href) {
     return (
-      <Link href={link} className='block'>
+      <Link href={href} className='block'>
         {CardComponent}
       </Link>
     );
   }
-
   return CardComponent;
 };
 OverviewCard.displayName = 'OverviewCard';
