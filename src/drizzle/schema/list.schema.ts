@@ -2,6 +2,7 @@ import { relations } from 'drizzle-orm';
 import { index, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 import { user } from './auth.schema';
+// eslint-disable-next-line import/no-cycle
 import { testimonial } from './testimonial.schema';
 
 export const list = pgTable(
@@ -13,7 +14,7 @@ export const list = pgTable(
       .references(() => user.id, { onDelete: 'cascade' }),
 
     name: text('name').notNull(),
-    description: text('description'),
+    message: text('message').notNull(),
 
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at')

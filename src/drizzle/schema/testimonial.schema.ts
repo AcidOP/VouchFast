@@ -8,10 +8,16 @@ import {
   timestamp,
 } from 'drizzle-orm/pg-core';
 
+// eslint-disable-next-line import/no-cycle
 import { list } from './list.schema';
 
-export const TESTIMONIAL_STATUSES = ['pending', 'approved', 'rejected'] as const;
-export type TESTIMONIAL_STATUS_MAP = (typeof TESTIMONIAL_STATUSES)[number];
+export const TESTIMONIAL_STATUSES = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+} as const;
+export type TESTIMONIAL_STATUS_MAP =
+  (typeof TESTIMONIAL_STATUSES)[keyof typeof TESTIMONIAL_STATUSES];
 export const testimonialStatus = pgEnum('testimonial_status', TESTIMONIAL_STATUSES);
 
 export const testimonial = pgTable(
@@ -26,12 +32,13 @@ export const testimonial = pgTable(
     authorName: text('author_name').notNull(),
     authorTitle: text('author_title'),
     authorCompany: text('author_company'),
-    authorAvatarUrl: text('author_avatar_url'),
 
     rating: integer('rating'),
     content: text('content').notNull(),
 
-    status: testimonialStatus('status').default('pending').notNull(),
+    status: testimonialStatus('status')
+      .default(TESTIMONIAL_STATUSES.PENDING)
+      .notNull(),
 
     approvedAt: timestamp('approved_at'),
     createdAt: timestamp('created_at').defaultNow().notNull(),

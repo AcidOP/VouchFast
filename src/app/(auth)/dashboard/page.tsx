@@ -24,7 +24,7 @@ const DashboardPage = async () => {
   ]);
 
   return (
-    <Container>
+    <Container className='space-y-16'>
       <DashboardOverview
         plan={user.plan as Plan}
         listCount={lists.length}
