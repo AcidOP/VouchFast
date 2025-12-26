@@ -8,13 +8,42 @@ import { redirect } from 'next/navigation';
 
 import getUser from '@/actions/auth.user';
 
+import { validateListInput } from '@/lib/utils';
+
 import type { NewListFormState } from '@/components/lists/create/new-list.client';
 import type { ListFormState } from '@/components/lists/edit/edit-list.client';
 
 const LIST_PATH = '/dashboard/lists';
+const ERROR_LIST_NOT_FOUND = 'List not found';
+
+/* -------------------------------------------------------------------------- */
+/* Public */
+/* -------------------------------------------------------------------------- */
+
+export const getPublicListForSubmission = async (listId: string) => {
+  const res = await db
+    .select({
+      id: list.id,
+      name: list.name,
+      message: list.message,
+    })
+    .from(list)
+    .where(eq(list.id, listId))
+    .limit(1);
+
+  if (!res[0]) {
+    throw new Error(ERROR_LIST_NOT_FOUND);
+  }
+
+  return res[0];
+};
+
+/* -------------------------------------------------------------------------- */
+/* Private / Dashboard */
+/* -------------------------------------------------------------------------- */
 
 export const getEditableListById = async (listId: string, userId: string) => {
-  const result = await db
+  const res = await db
     .select({
       id: list.id,
       name: list.name,
@@ -25,65 +54,26 @@ export const getEditableListById = async (listId: string, userId: string) => {
     .where(and(eq(list.id, listId), eq(list.userId, userId)))
     .limit(1);
 
-  if (!result[0]) {
-    throw new Error('List not found');
+  if (!res[0]) {
+    throw new Error(ERROR_LIST_NOT_FOUND);
   }
 
-  return result[0];
-};
-
-export const updateListAction = async (listId: string, listInfo: ListFormState) => {
-  const user = await getUser();
-  if (!user) throw new Error('Unauthorized');
-
-  const name = listInfo.listName.trim();
-  const message = listInfo.inviteMessage.trim();
-
-  if (!name || !message) {
-    throw new Error('List name and invitation message are required.');
-  }
-
-  if (name.length > 100 || message.length > 500) {
-    throw new Error('List name or invitation message is too long.');
-  }
-
-  if (name.length < 3 || message.length < 10) {
-    throw new Error('List name or invitation message is too short.');
-  }
-
-  const result = await db
-    .update(list)
-    .set({
-      name: listInfo.listName,
-      message: listInfo.inviteMessage,
-    })
-    .where(and(eq(list.id, listId), eq(list.userId, user.id)))
-    .returning({ id: list.id });
-
-  if (result.length === 0) {
-    throw new Error('List not found or access denied');
-  }
-
-  updateTag(`list:${listId}`);
-  updateTag(`lists:${user.id}`);
-
-  redirect(LIST_PATH);
+  return res[0];
 };
 
 export const getListWithTestimonials = async (listId: string, userId: string) =>
   unstable_cache(
     async () => {
-      const listResult = await db
+      const listRes = await db
         .select()
         .from(list)
         .where(and(eq(list.id, listId), eq(list.userId, userId)))
         .limit(1);
 
-      if (!listResult[0]) {
-        throw new Error('List not found');
+      if (!listRes[0]) {
+        throw new Error(ERROR_LIST_NOT_FOUND);
       }
 
-      // 2️⃣ Fetch testimonials for that list
       const testimonials = await db
         .select({
           id: testimonial.id,
@@ -100,16 +90,13 @@ export const getListWithTestimonials = async (listId: string, userId: string) =>
         .orderBy(desc(testimonial.createdAt));
 
       return {
-        list: listResult[0],
+        list: listRes[0],
         testimonials,
       };
     },
     [`list:${listId}`],
     {
-      tags: [
-        `list:${listId}`,
-        `lists:${listId}`, // optional, for broader invalidation
-      ],
+      tags: [`list:${listId}`, `lists:${userId}`, `dashboard:${userId}`],
     },
   )();
 
@@ -139,9 +126,7 @@ export const getTotalTestimonialCount = async (userId: string) =>
   unstable_cache(
     async () => {
       const res = await db
-        .select({
-          total: count(testimonial.id),
-        })
+        .select({ total: count(testimonial.id) })
         .from(testimonial)
         .innerJoin(list, eq(testimonial.listId, list.id))
         .where(eq(list.userId, userId));
@@ -154,6 +139,10 @@ export const getTotalTestimonialCount = async (userId: string) =>
     },
   )();
 
+/* -------------------------------------------------------------------------- */
+/* Mutations */
+/* -------------------------------------------------------------------------- */
+
 export const createListAction = async (listInfo: NewListFormState) => {
   const user = await getUser();
   if (!user) throw new Error('Unauthorized');
@@ -161,17 +150,7 @@ export const createListAction = async (listInfo: NewListFormState) => {
   const name = listInfo.listName.trim();
   const message = listInfo.inviteMessage.trim();
 
-  if (!name || !message) {
-    throw new Error('List name and invitation message are required.');
-  }
-
-  if (name.length > 100 || message.length > 500) {
-    throw new Error('List name or invitation message is too long.');
-  }
-
-  if (name.length < 3 || message.length < 10) {
-    throw new Error('List name or invitation message is too short.');
-  }
+  validateListInput(name, message);
 
   await db.transaction(async tx => {
     const [{ total }] = await tx
@@ -190,8 +169,8 @@ export const createListAction = async (listInfo: NewListFormState) => {
     await tx.insert(list).values({
       id: crypto.randomUUID(),
       userId: user.id,
-      name: listInfo.listName,
-      message: listInfo.inviteMessage,
+      name,
+      message,
     });
   });
 
@@ -201,25 +180,42 @@ export const createListAction = async (listInfo: NewListFormState) => {
   redirect(LIST_PATH);
 };
 
-export const deleteListAction = async (listId: string) => {
+export const updateListAction = async (listId: string, listInfo: ListFormState) => {
   const user = await getUser();
-  if (!user) {
-    return {
-      success: false,
-      message: 'Unauthorized',
-    };
+  if (!user) throw new Error('Unauthorized');
+
+  const name = listInfo.listName.trim();
+  const message = listInfo.inviteMessage.trim();
+
+  validateListInput(name, message);
+
+  const res = await db
+    .update(list)
+    .set({ name, message })
+    .where(and(eq(list.id, listId), eq(list.userId, user.id)))
+    .returning({ id: list.id });
+
+  if (res.length === 0) {
+    throw new Error('List not found or access denied');
   }
 
-  // single query to delete list checking user ownership
-  const result = await db
+  updateTag(`list:${listId}`);
+  updateTag(`lists:${user.id}`);
+  updateTag(`dashboard:${user.id}`);
+
+  redirect(LIST_PATH);
+};
+
+export const deleteListAction = async (listId: string) => {
+  const user = await getUser();
+  if (!user) throw new Error('Unauthorized');
+
+  const res = await db
     .delete(list)
     .where(and(eq(list.id, listId), eq(list.userId, user.id)))
     .returning({ id: list.id });
 
-  // If nothing was deleted, either:
-  // - list doesn't exist
-  // - or doesn't belong to user
-  if (result.length === 0) {
+  if (res.length === 0) {
     throw new Error('List not found or access denied');
   }
 
@@ -227,12 +223,4 @@ export const deleteListAction = async (listId: string) => {
   updateTag(`dashboard:${user.id}`);
 
   redirect(LIST_PATH);
-};
-
-export const getTestimonialsFromList = async (listId: string) => {
-  return db
-    .select()
-    .from(testimonial)
-    .where(eq(testimonial.listId, listId))
-    .orderBy(desc(testimonial.createdAt));
 };

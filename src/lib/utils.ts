@@ -5,6 +5,34 @@ import type { ClassValue } from 'clsx';
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
+export const formatDate = (value: Date | string) => {
+  const date = value instanceof Date ? value : new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return '—';
+  }
+
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+  }).format(date);
+};
+
+export const validateListInput = (name: string, message: string) => {
+  if (!name || !message) {
+    throw new Error('List name and invitation message are required.');
+  }
+
+  if (name.length < 3 || message.length < 10) {
+    throw new Error('List name or invitation message is too short.');
+  }
+
+  if (name.length > 100 || message.length > 500) {
+    throw new Error('List name or invitation message is too long.');
+  }
+};
+
 // Create a JSON type definition without the any type
 type JsonData =
   | string

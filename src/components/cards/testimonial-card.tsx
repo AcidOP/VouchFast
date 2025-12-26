@@ -1,7 +1,9 @@
 'use client';
 
-// import DownloadTestimonialButton from '@/components/download-testimonial-btn';
-// import EditTestimonialButton from '@/components/edit-testimonial-btn';
+import { formatDate } from '@/lib/utils';
+
+import DownloadTestimonialButton from '@/components/testimonials/buttons/download-testimonial-btn';
+import EditTestimonialButton from '@/components/testimonials/buttons/edit-testimonial-btn';
 import DeleteTestimonialButton from '@/components/testimonials/delete-testimonial-btn';
 
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
@@ -25,10 +27,6 @@ interface ContentFieldProps {
 }
 
 const ContentField = ({ heading, field }: ContentFieldProps) => {
-  //   if (field instanceof Date) {
-  //     field = formatDate(field);
-  //   }
-
   return (
     <div>
       <div className='text-sm text-zinc-400'>{heading}</div>
@@ -37,7 +35,7 @@ const ContentField = ({ heading, field }: ContentFieldProps) => {
   );
 };
 
-export default function Component({ testimonial }: IProps) {
+const TestimonialCard = ({ testimonial }: IProps) => {
   return (
     <Card className='w-full max-w-3xl bg-zinc-950 text-zinc-100'>
       <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
@@ -57,15 +55,17 @@ export default function Component({ testimonial }: IProps) {
           )}
           <ContentField
             heading='Created At'
-            field={testimonial.createdAt.toDateString()}
+            field={formatDate(testimonial.createdAt)}
           />
         </div>
       </CardContent>
 
       <CardFooter className='flex justify-end gap-4 border-t border-zinc-800 pt-4'>
-        {/* <DownloadTestimonialButton  /> */}
-        {/* <EditTestimonialButton {...testimonial} /> */}
+        <DownloadTestimonialButton testimonial={testimonial} />
+        <EditTestimonialButton testimonial={testimonial} />
       </CardFooter>
     </Card>
   );
-}
+};
+
+export default TestimonialCard;
