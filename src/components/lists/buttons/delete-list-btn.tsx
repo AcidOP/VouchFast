@@ -31,11 +31,7 @@ const DeleteList = ({ listId }: IProps) => {
   const handleDelete = () => {
     startTransition(async () => {
       try {
-        const result = await deleteListAction(listId);
-
-        if (!result.success) {
-          throw new Error(result.message);
-        }
+        await deleteListAction(listId);
 
         toast({
           title: 'List deleted',
