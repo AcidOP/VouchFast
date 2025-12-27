@@ -1,12 +1,14 @@
 'use server';
 
 import { db } from '@/drizzle/db';
-import { list, testimonial } from '@/drizzle/schema';
-import { and, eq } from 'drizzle-orm';
+import { list, testimonial, user } from '@/drizzle/schema';
+import { and, count, eq } from 'drizzle-orm';
 import { updateTag } from 'next/cache';
 import z from 'zod';
 
 import getUser from '@/actions/auth.user';
+
+import { PLAN_LIMITS } from '@/lib/plan-limits';
 
 const testimonialSchema = z.object({
   listId: z.string(),
@@ -23,8 +25,10 @@ export const createTestimonialAction = async (input: unknown) => {
     .select({
       listId: list.id,
       userId: list.userId,
+      plan: user.plan,
     })
     .from(list)
+    .innerJoin(user, eq(user.id, list.userId))
     .where(eq(list.id, data.listId))
     .limit(1);
 
@@ -32,7 +36,20 @@ export const createTestimonialAction = async (input: unknown) => {
     throw new Error('Invalid list');
   }
 
-  const { userId, listId } = res[0];
+  const { userId, listId, plan } = res[0];
+
+  // 🔹 Count testimonials for this list
+  const [{ total }] = await db
+    .select({ total: count(testimonial.id) })
+    .from(testimonial)
+    .where(eq(testimonial.listId, listId));
+
+  const limit = PLAN_LIMITS[plan].maxTestimonials;
+  if (total >= limit) {
+    throw new Error(
+      `Your current plan allows a maximum of ${limit} testimonials per list.`,
+    );
+  }
 
   await db.insert(testimonial).values({
     id: crypto.randomUUID(),

@@ -1,13 +1,14 @@
 'use server';
 
 import { db } from '@/drizzle/db';
-import { list, PLANS, testimonial } from '@/drizzle/schema';
+import { list, testimonial } from '@/drizzle/schema';
 import { and, count, desc, eq } from 'drizzle-orm';
 import { unstable_cache, updateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import getUser from '@/actions/auth.user';
 
+import { PLAN_LIMITS } from '@/lib/plan-limits';
 import { validateListInput } from '@/lib/utils';
 
 import type { NewListFormState } from '@/components/lists/create/new-list.client';
@@ -158,12 +159,9 @@ export const createListAction = async (listInfo: NewListFormState) => {
       .from(list)
       .where(eq(list.userId, user.id));
 
-    if (user.plan === PLANS.FREE && total >= 1) {
-      throw new Error('Free plan allows only 1 list.');
-    }
-
-    if (total >= 10) {
-      throw new Error('You have reached the maximum number of lists allowed.');
+    const limit = PLAN_LIMITS[user.plan].maxLists;
+    if (total >= limit) {
+      throw new Error(`Your current plan allows a maximum of ${limit} lists.`);
     }
 
     await tx.insert(list).values({
