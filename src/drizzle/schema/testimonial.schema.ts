@@ -36,9 +36,7 @@ export const testimonial = pgTable(
     rating: integer('rating'),
     content: text('content').notNull(),
 
-    status: testimonialStatus('status')
-      .default(TESTIMONIAL_STATUSES.PENDING)
-      .notNull(),
+    status: testimonialStatus('status').default('PENDING').notNull(),
 
     approvedAt: timestamp('approved_at'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
