@@ -25,6 +25,12 @@ export const auth = betterAuth({
       },
     },
   },
+  rateLimit: {
+    enabled: true,
+    max: 100,
+    window: 60, // 100 requests per 60 seconds
+    storage: 'memory',
+  },
   plugins: [nextCookies()],
   socialProviders: {
     github: {
@@ -39,5 +45,8 @@ export const auth = betterAuth({
   },
   advanced: {
     cookiePrefix: 'vouchfast',
+  },
+  telemetry: {
+    enabled: false,
   },
 });
