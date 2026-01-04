@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 'use server';
 
 import { db } from '@/drizzle/db';
@@ -97,14 +98,14 @@ export const getListWithTestimonials = async (listId: string, userId: string) =>
         testimonials: rows
           .filter(r => r.testimonialId !== null)
           .map(r => ({
-            id: r.testimonialId,
-            authorName: r.authorName,
+            id: r.testimonialId!,
+            authorName: r.authorName!,
             authorTitle: r.authorTitle,
             authorCompany: r.authorCompany,
-            content: r.content,
+            content: r.content!,
             rating: r.rating,
-            status: r.status,
-            createdAt: r.createdAt,
+            status: r.status!,
+            createdAt: r.createdAt!,
           })),
       };
     },
