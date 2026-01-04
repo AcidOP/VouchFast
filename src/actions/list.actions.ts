@@ -62,22 +62,16 @@ export const getEditableListById = async (listId: string, userId: string) => {
   return res[0];
 };
 
+// getListWithTestimonials fetched list (id, name) and its testimonials for a given user
 export const getListWithTestimonials = async (listId: string, userId: string) =>
   unstable_cache(
     async () => {
-      const listRes = await db
-        .select()
-        .from(list)
-        .where(and(eq(list.id, listId), eq(list.userId, userId)))
-        .limit(1);
-
-      if (!listRes[0]) {
-        throw new Error(ERROR_LIST_NOT_FOUND);
-      }
-
-      const testimonials = await db
+      const rows = await db
         .select({
-          id: testimonial.id,
+          listId: list.id,
+          listName: list.name,
+
+          testimonialId: testimonial.id,
           authorName: testimonial.authorName,
           authorTitle: testimonial.authorTitle,
           authorCompany: testimonial.authorCompany,
@@ -86,18 +80,35 @@ export const getListWithTestimonials = async (listId: string, userId: string) =>
           status: testimonial.status,
           createdAt: testimonial.createdAt,
         })
-        .from(testimonial)
-        .where(eq(testimonial.listId, listId))
+        .from(list)
+        .innerJoin(testimonial, eq(testimonial.listId, list.id))
+        .where(and(eq(list.id, listId), eq(list.userId, userId)))
         .orderBy(desc(testimonial.createdAt));
 
+      if (rows.length === 0) {
+        throw new Error(ERROR_LIST_NOT_FOUND);
+      }
+
       return {
-        list: listRes[0],
-        testimonials,
+        list: {
+          id: rows[0].listId,
+          name: rows[0].listName,
+        },
+        testimonials: rows.map(r => ({
+          id: r.testimonialId,
+          authorName: r.authorName,
+          authorTitle: r.authorTitle,
+          authorCompany: r.authorCompany,
+          content: r.content,
+          rating: r.rating,
+          status: r.status,
+          createdAt: r.createdAt,
+        })),
       };
     },
-    [`list:${listId}`],
+    [`dashboard:list:${listId}`],
     {
-      tags: [`list:${listId}`, `lists:${userId}`, `dashboard:${userId}`],
+      tags: [`dashboard:list:${listId}`, `lists:${userId}`, `dashboard:${userId}`],
     },
   )();
 

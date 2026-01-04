@@ -15,7 +15,7 @@ const ListPage = async ({ params }: PageProps<'/dashboard/lists/[listId]'>) => {
 
   return (
     <>
-      <ListHeader list={list} />
+      <ListHeader {...list} />
 
       {testimonials.length === 0 ? (
         <p className='text-muted-foreground mt-8'>No testimonials found.</p>
