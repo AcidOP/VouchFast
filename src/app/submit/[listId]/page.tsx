@@ -9,17 +9,19 @@ const SubmitTestimonial = async ({ params }: PageProps<'/submit/[listId]'>) => {
   try {
     list = await getPublicListForSubmission(listId);
   } catch {
-    return (
-      <div className='mx-auto mt-32 max-w-md text-center'>
-        <h1 className='text-xl font-semibold'>Invalid link</h1>
-        <p className='text-muted-foreground mt-2'>
-          This testimonial link is no longer valid.
-        </p>
-      </div>
-    );
+    return <InvalidList />;
   }
 
-  return <SubmitTestimonialClient list={list} />;
+  return <SubmitTestimonialClient {...list} />;
 };
+
+const InvalidList = () => (
+  <div className='mx-auto mt-32 max-w-md text-center'>
+    <h1 className='text-xl font-semibold'>Invalid link</h1>
+    <p className='text-muted-foreground mt-2'>
+      This testimonial link is no longer valid.
+    </p>
+  </div>
+);
 
 export default SubmitTestimonial;

@@ -7,14 +7,12 @@ import { createTestimonialAction } from '@/actions/testimonial.action';
 import Button from '@/components/ui/button';
 
 interface Props {
-  list: {
-    id: string;
-    name: string;
-    message: string;
-  };
+  id: string;
+  name: string;
+  message: string;
 }
 
-const SubmitTestimonialClient = ({ list }: Props) => {
+const SubmitTestimonialClient = ({ id, name, message }: Props) => {
   const [isPending, startTransition] = useTransition();
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +35,7 @@ const SubmitTestimonialClient = ({ list }: Props) => {
     startTransition(async () => {
       try {
         await createTestimonialAction({
-          listId: list.id,
+          listId: id,
           ...form,
         });
         setSuccess(true);
@@ -60,9 +58,9 @@ const SubmitTestimonialClient = ({ list }: Props) => {
 
   return (
     <div className='mx-auto mt-16 max-w-xl space-y-6'>
-      <h1 className='text-2xl font-semibold'>{list.name}</h1>
+      <h1 className='text-2xl font-semibold'>{name}</h1>
 
-      <p className='text-muted-foreground'>{list.message}</p>
+      <p className='text-muted-foreground'>{message}</p>
 
       <input
         placeholder='Your name'
