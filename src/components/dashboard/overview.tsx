@@ -1,5 +1,4 @@
-import { PLANS } from '@/drizzle/schema';
-
+import { PLAN_LIMITS } from '@/lib/plan-limits';
 import { cn } from '@/lib/utils';
 
 import Heading from '@/components/dashboard-heading';
@@ -14,17 +13,6 @@ interface IProps {
   className?: string;
 }
 
-const PLAN_LIMITS = {
-  [PLANS.FREE]: {
-    lists: 1,
-    testimonials: 3,
-  },
-  [PLANS.PAID]: {
-    lists: 15,
-    testimonials: Infinity,
-  },
-} as const;
-
 const formatQuota = (used: number, limit: number) =>
   limit === Infinity ? `${used}/∞` : `${used}/${limit}`;
 
@@ -36,8 +24,8 @@ const DashboardOverview = ({
 }: IProps) => {
   const limits = PLAN_LIMITS[plan];
 
-  const listQuota = formatQuota(listCount, limits.lists);
-  const testimonialQuota = formatQuota(testimonialCount, limits.testimonials);
+  const listQuota = formatQuota(listCount, limits.listLimit);
+  const testimonialQuota = formatQuota(testimonialCount, limits.testimonialLimit);
 
   return (
     <>

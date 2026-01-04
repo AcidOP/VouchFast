@@ -1,5 +1,5 @@
 import { db } from '@/drizzle/db';
-import { PLANS } from '@/drizzle/schema';
+import { DEFAULT_PLAN } from '@/drizzle/schema';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { nextCookies } from 'better-auth/next-js';
@@ -19,9 +19,9 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       plan: {
-        type: Object.values(PLANS),
+        type: ['FREE', 'PAID'],
         input: false,
-        defaultValue: PLANS.FREE,
+        defaultValue: DEFAULT_PLAN,
       },
     },
   },

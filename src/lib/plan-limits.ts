@@ -1,15 +1,11 @@
-import { PLANS } from '@/drizzle/schema';
+import type { Plan } from '@/drizzle/schema';
 
-export const PLAN_LIMITS = {
-  [PLANS.FREE]: {
-    maxLists: 1,
-    maxTestimonials: 3,
-  },
+type PlanLimits = {
+  listLimit: number;
+  testimonialLimit: number;
+};
 
-  [PLANS.PAID]: {
-    maxLists: 10,
-    maxTestimonials: Infinity,
-  },
-} as const;
-
-export type PlanKey = keyof typeof PLAN_LIMITS;
+export const PLAN_LIMITS: Record<Plan, PlanLimits> = {
+  FREE: { listLimit: 3, testimonialLimit: 30 },
+  PAID: { listLimit: 100, testimonialLimit: 1000 },
+};

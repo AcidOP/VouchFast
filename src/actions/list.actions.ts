@@ -173,7 +173,7 @@ export const createListAction = async (listInfo: NewListFormState) => {
       .from(list)
       .where(eq(list.userId, user.id));
 
-    const limit = PLAN_LIMITS[user.plan].maxLists;
+    const limit = PLAN_LIMITS[user.plan].listLimit;
     if (total >= limit) {
       throw new Error(`Your current plan allows a maximum of ${limit} lists.`);
     }

@@ -8,9 +8,12 @@ import {
   timestamp,
 } from 'drizzle-orm/pg-core';
 
-export const PLANS = { FREE: 'FREE', PAID: 'PAID' } as const;
-export type Plan = (typeof PLANS)[keyof typeof PLANS];
-export const planEnum = pgEnum('plan_enum', PLANS);
+export const PLAN_VALUES = ['FREE', 'PAID'] as const;
+export type Plan = (typeof PLAN_VALUES)[number];
+
+export const DEFAULT_PLAN: Plan = 'FREE';
+
+export const planEnum = pgEnum('plan_enum', PLAN_VALUES);
 
 export const user = pgTable('user', {
   id: text('id').primaryKey(),
@@ -18,7 +21,7 @@ export const user = pgTable('user', {
   email: text('email').notNull().unique(),
   emailVerified: boolean('email_verified').default(false).notNull(),
   image: text('image'),
-  plan: planEnum('plan').default('FREE').notNull(),
+  plan: planEnum('plan').default(DEFAULT_PLAN).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at')
     .defaultNow()

@@ -44,7 +44,7 @@ export const createTestimonialAction = async (input: unknown) => {
     .from(testimonial)
     .where(eq(testimonial.listId, listId));
 
-  const limit = PLAN_LIMITS[plan].maxTestimonials;
+  const limit = PLAN_LIMITS[plan].testimonialLimit;
   if (total >= limit) {
     throw new Error(
       `Your current plan allows a maximum of ${limit} testimonials per list.`,

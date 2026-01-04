@@ -28,8 +28,8 @@ const BillingInfo = ({ name, email, plan }: IProps) => {
           </p>
 
           <ul className='mt-4 list-inside list-disc space-y-2'>
-            <li>{tier.maxLists} Lists</li>
-            <li>{tier.maxTestimonials} Client Testimonials</li>
+            <li>{tier.listLimit} Lists</li>
+            <li>{tier.testimonialLimit} Client Testimonials</li>
           </ul>
         </div>
       </section>
