@@ -66,6 +66,5 @@ export const deleteAccountAction = async () => {
     auth.api.signOut({ headers: await headers() }),
   ]);
 
-  updateTag(`dashboard:${currentUser.id}`);
   redirect('/');
 };

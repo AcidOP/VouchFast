@@ -61,7 +61,6 @@ export const createTestimonialAction = async (input: unknown) => {
   });
 
   updateTag(`list:${listId}`);
-  updateTag(`dashboard:${userId}`);
   updateTag(`testimonial-count:${user.id}`);
 };
 
@@ -151,12 +150,7 @@ export const editTestimonialAction = async (
 
   const { listId } = result[0];
 
-  /**
-   * 🔁 Revalidate all dependent caches
-   */
   updateTag(`list:${listId}`);
-  updateTag(`lists:${user.id}`);
-  updateTag(`dashboard:${user.id}`);
 
   return {
     success: true,

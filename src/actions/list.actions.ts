@@ -81,7 +81,7 @@ export const getListWithTestimonials = async (listId: string, userId: string) =>
           createdAt: testimonial.createdAt,
         })
         .from(list)
-        .innerJoin(testimonial, eq(testimonial.listId, list.id))
+        .leftJoin(testimonial, eq(testimonial.listId, list.id))
         .where(and(eq(list.id, listId), eq(list.userId, userId)))
         .orderBy(desc(testimonial.createdAt));
 
@@ -94,21 +94,23 @@ export const getListWithTestimonials = async (listId: string, userId: string) =>
           id: rows[0].listId,
           name: rows[0].listName,
         },
-        testimonials: rows.map(r => ({
-          id: r.testimonialId,
-          authorName: r.authorName,
-          authorTitle: r.authorTitle,
-          authorCompany: r.authorCompany,
-          content: r.content,
-          rating: r.rating,
-          status: r.status,
-          createdAt: r.createdAt,
-        })),
+        testimonials: rows
+          .filter(r => r.testimonialId !== null)
+          .map(r => ({
+            id: r.testimonialId,
+            authorName: r.authorName,
+            authorTitle: r.authorTitle,
+            authorCompany: r.authorCompany,
+            content: r.content,
+            rating: r.rating,
+            status: r.status,
+            createdAt: r.createdAt,
+          })),
       };
     },
-    [`dashboard:list:${listId}`],
+    [`list:${listId}`],
     {
-      tags: [`dashboard:list:${listId}`, `lists:${userId}`, `dashboard:${userId}`],
+      tags: [`list:${listId}`, `lists:${userId}`, `dashboard:${userId}`],
     },
   )();
 
@@ -128,7 +130,7 @@ export const getListWithTestimonialCount = async (userId: string) =>
         .groupBy(list.id)
         .orderBy(list.createdAt);
     },
-    [`lists:${userId}`],
+    [`list:${userId}`],
     {
       tags: [`lists:${userId}`, `dashboard:${userId}`],
     },
@@ -184,8 +186,6 @@ export const createListAction = async (listInfo: NewListFormState) => {
   });
 
   updateTag(`lists:${user.id}`);
-  updateTag(`dashboard:${user.id}`);
-
   redirect(LIST_PATH);
 };
 
@@ -210,7 +210,6 @@ export const updateListAction = async (listId: string, listInfo: ListFormState) 
 
   updateTag(`list:${listId}`);
   updateTag(`lists:${user.id}`);
-  updateTag(`dashboard:${user.id}`);
 
   redirect(LIST_PATH);
 };
