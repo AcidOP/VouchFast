@@ -60,7 +60,8 @@ export const createTestimonialAction = async (input: unknown) => {
     content: data.content,
   });
 
-  updateTag(`list:${userId}`);
+  updateTag(`list:${listId}`);
+  updateTag(`dashboard:${userId}`);
   updateTag(`testimonial-count:${userId}`);
 };
 

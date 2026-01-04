@@ -6,6 +6,6 @@ type PlanLimits = {
 };
 
 export const PLAN_LIMITS: Record<Plan, PlanLimits> = {
-  FREE: { listLimit: 3, testimonialLimit: 30 },
-  PAID: { listLimit: 100, testimonialLimit: 1000 },
+  FREE: { listLimit: 1, testimonialLimit: 3 },
+  PAID: { listLimit: 15, testimonialLimit: 10_000 },
 };

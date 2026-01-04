@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from '@/drizzle/db';
-import { list, testimonial } from '@/drizzle/schema';
+import { list, testimonial, user } from '@/drizzle/schema';
 import { and, count, desc, eq } from 'drizzle-orm';
 import { unstable_cache, updateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -22,22 +22,29 @@ const ERROR_LIST_NOT_FOUND = 'List not found';
 /* Public */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * NOTE:
+ * We count testimonials per-list instead of per-user.
+ * This is safe because FREE users are restricted to exactly 1 list.
+ * If multiple lists per user are introduced in FREE tier, this must be updated.
+ */
 export const getPublicListForSubmission = async (listId: string) => {
   const res = await db
     .select({
       id: list.id,
       name: list.name,
       message: list.message,
+      plan: user.plan,
+      testimonialCount: count(testimonial.id),
     })
     .from(list)
+    .innerJoin(user, eq(user.id, list.userId))
+    .leftJoin(testimonial, eq(testimonial.listId, list.id))
     .where(eq(list.id, listId))
+    .groupBy(list.id, user.id)
     .limit(1);
 
-  if (!res[0]) {
-    return null;
-  }
-
-  return res[0];
+  return res[0] ?? null;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -133,7 +140,11 @@ export const getListWithTestimonialCount = async (userId: string) =>
     },
     [`list:${userId}`],
     {
-      tags: [`lists:${userId}`, `dashboard:${userId}`],
+      tags: [
+        `lists:${userId}`,
+        `dashboard:${userId}`,
+        `testimonial-count:${userId}`,
+      ],
     },
   )();
 
