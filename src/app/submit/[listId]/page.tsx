@@ -5,10 +5,8 @@ import SubmitTestimonialClient from '@/components/testimonials/create/submit-tes
 const SubmitTestimonial = async ({ params }: PageProps<'/submit/[listId]'>) => {
   const { listId } = await params;
 
-  let list;
-  try {
-    list = await getPublicListForSubmission(listId);
-  } catch {
+  const list = await getPublicListForSubmission(listId);
+  if (!list) {
     return <InvalidList />;
   }
 

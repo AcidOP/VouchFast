@@ -34,7 +34,7 @@ export const getPublicListForSubmission = async (listId: string) => {
     .limit(1);
 
   if (!res[0]) {
-    throw new Error(ERROR_LIST_NOT_FOUND);
+    return null;
   }
 
   return res[0];
