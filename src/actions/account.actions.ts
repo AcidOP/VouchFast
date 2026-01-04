@@ -62,9 +62,10 @@ export const deleteAccountAction = async () => {
   }
 
   await Promise.all([
-    await db.delete(user).where(eq(user.id, currentUser.id)),
-    await auth.api.signOut({ headers: await headers() }),
+    db.delete(user).where(eq(user.id, currentUser.id)),
+    auth.api.signOut({ headers: await headers() }),
   ]);
 
+  updateTag(`dashboard:${currentUser.id}`);
   redirect('/');
 };
