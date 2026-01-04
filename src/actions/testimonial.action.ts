@@ -62,6 +62,7 @@ export const createTestimonialAction = async (input: unknown) => {
 
   updateTag(`list:${listId}`);
   updateTag(`dashboard:${userId}`);
+  updateTag(`testimonial-count:${user.id}`);
 };
 
 export const deleteTestimonialAction = async (testimonialId: string) => {
@@ -99,6 +100,7 @@ export const deleteTestimonialAction = async (testimonialId: string) => {
   // 🔁 Revalidate caches
   updateTag(`list:${listId}`);
   updateTag(`dashboard:${user.id}`);
+  updateTag(`testimonial-count:${user.id}`);
 
   return {
     success: true,
