@@ -2,7 +2,7 @@
 
 import { db } from '@/drizzle/db';
 import { list, testimonial, user } from '@/drizzle/schema';
-import { and, count, eq } from 'drizzle-orm';
+import { and, count, eq, exists } from 'drizzle-orm';
 import { updateTag } from 'next/cache';
 import z from 'zod';
 
@@ -74,28 +74,29 @@ export const deleteTestimonialAction = async (testimonialId: string) => {
     };
   }
 
-  // First verify ownership by checking if testimonial belongs to user's list
-  const testimonialToDelete = await db
-    .select({
-      id: testimonial.id,
-      listId: testimonial.listId,
-    })
-    .from(testimonial)
-    .innerJoin(list, eq(testimonial.listId, list.id))
-    .where(and(eq(testimonial.id, testimonialId), eq(list.userId, user.id)))
-    .limit(1);
+  const deleted = await db
+    .delete(testimonial)
+    .where(
+      and(
+        eq(testimonial.id, testimonialId),
+        exists(
+          db
+            .select({ id: list.id })
+            .from(list)
+            .where(and(eq(list.id, testimonial.listId), eq(list.userId, user.id))),
+        ),
+      ),
+    )
+    .returning({ listId: testimonial.listId });
 
-  if (testimonialToDelete.length === 0) {
+  if (deleted.length === 0) {
     return {
       success: false,
       message: 'Testimonial not found or access denied',
     };
   }
 
-  const { listId } = testimonialToDelete[0];
-
-  // Now delete the testimonial
-  await db.delete(testimonial).where(eq(testimonial.id, testimonialId));
+  const { listId } = deleted[0];
 
   // 🔁 Revalidate caches
   updateTag(`list:${listId}`);
