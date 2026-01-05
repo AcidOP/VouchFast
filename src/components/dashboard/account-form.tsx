@@ -5,13 +5,15 @@ import { useState, useTransition } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { AvatarFallback } from '@radix-ui/react-avatar';
 
-import { Avatar, AvatarImage } from '../ui/avatar';
 import DeleteAccountBtn from './delete-account-btn';
 
-import { deleteAccountAction, updateAccountAction } from '@/actions/account.actions';
+import { deleteAccountAction } from '@/actions/account.actions';
+
+import { authClient } from '@/lib/auth.client';
 
 import Heading from '@/components/dashboard-heading';
 
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import Button from '@/components/ui/button';
 
 interface Props {
@@ -29,15 +31,14 @@ const AccountSettingsClient = ({ email, image, name }: Props) => {
 
   const onSave = () => {
     startTransition(async () => {
-      const result = await updateAccountAction({
+      const { data: _, error } = await authClient.updateUser({
         name: accountName,
-        email: accountEmail,
       });
 
       toast({
-        title: result.success ? 'Saved' : 'Error',
-        description: result.message,
-        variant: result.success ? 'default' : 'destructive',
+        title: error ? 'Error' : 'Saved',
+        description: error ? error.message : 'Account updated successfully.',
+        variant: error ? 'destructive' : 'default',
       });
     });
   };
