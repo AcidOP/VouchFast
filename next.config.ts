@@ -5,9 +5,7 @@ const nextConfig: NextConfig = {
     turbopackFileSystemCacheForDev: true,
     optimizeCss: true,
   },
-  reactCompiler: {
-    compilationMode: 'annotation',
-  },
+  reactCompiler: true,
   allowedDevOrigins: ['localhost', '192.168.*.*'],
   productionBrowserSourceMaps: true,
 };
