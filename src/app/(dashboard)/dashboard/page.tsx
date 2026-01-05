@@ -12,11 +12,11 @@ import Container from '@/components/layout/container';
 
 import type { Plan } from '@/drizzle/schema';
 
-export const dynamic = 'force-dynamic';
-
 const DashboardPage = async () => {
   const user = await getUser();
-  if (!user) redirect('/login');
+  if (!user) {
+    redirect('/login');
+  }
 
   const [lists, testimonialCount] = await Promise.all([
     getListWithTestimonialCount(user.id),
