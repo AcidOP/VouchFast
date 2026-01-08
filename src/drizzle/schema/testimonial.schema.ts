@@ -11,13 +11,8 @@ import {
 // eslint-disable-next-line import/no-cycle
 import { list } from './list.schema';
 
-export const TESTIMONIAL_STATUSES = {
-  PENDING: 'PENDING',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED',
-} as const;
-export type TESTIMONIAL_STATUS_MAP =
-  (typeof TESTIMONIAL_STATUSES)[keyof typeof TESTIMONIAL_STATUSES];
+export const TESTIMONIAL_STATUSES = ['PENDING', 'APPROVED', 'REJECTED'] as const;
+export type TestimonialStatus = (typeof TESTIMONIAL_STATUSES)[number];
 export const testimonialStatus = pgEnum('testimonial_status', TESTIMONIAL_STATUSES);
 
 export const testimonial = pgTable(
