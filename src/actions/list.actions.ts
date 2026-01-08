@@ -241,6 +241,4 @@ export const deleteListAction = async (listId: string) => {
 
   updateTag(`lists:${user.id}`);
   updateTag(`dashboard:${user.id}`);
-
-  redirect(LIST_PATH);
 };

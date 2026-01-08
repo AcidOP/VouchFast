@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useTransition } from 'react';
 
 import { useToast } from '@/hooks/use-toast';

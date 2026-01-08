@@ -55,10 +55,15 @@ export const deleteAccountAction = async () => {
     throw new Error('Unauthorized');
   }
 
-  await Promise.all([
-    db.delete(user).where(eq(user.id, currentUser.id)),
-    auth.api.signOut({ headers: await headers() }),
-  ]);
+  await db.transaction(async tx => {
+    await tx.delete(user).where(eq(user.id, currentUser.id));
+  });
+
+  try {
+    await auth.api.signOut({ headers: await headers() });
+  } catch (_err) {
+    console.error('Sign-out failed after account deletion');
+  }
 
   redirect('/');
 };
