@@ -244,14 +244,18 @@ export const updateListAction = async (listId: string, listInfo: ListFormState) 
     .update(list)
     .set({ name, message })
     .where(and(eq(list.id, listId), eq(list.userId, user.id)))
-    .returning({ id: list.id });
+    .returning({ id: list.id, name: list.name });
 
   if (res.length === 0) {
     throw new Error('List not found or access denied');
   }
 
+  const newList = res[0];
+
   updateTag(`list:${listId}`);
-  updateTag(`lists:${user.id}`);
+  if (newList.name !== name) {
+    updateTag(`lists:${user.id}`); // Only invalidate if name changed
+  }
 
   redirect(LIST_PATH);
 };
