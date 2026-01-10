@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 
 import { useToast } from '@/hooks/use-toast';
 import { Trash2 } from 'lucide-react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { deleteListAction } from '@/actions/list.actions';
 
@@ -41,7 +41,7 @@ const DeleteList = ({ listId }: IProps) => {
         });
 
         setOpen(false);
-        await router.push('/dashboard/lists');
+        router.push('/dashboard/lists');
       } catch (err) {
         toast({
           title: 'Deletion failed',
