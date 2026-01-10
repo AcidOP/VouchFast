@@ -7,8 +7,8 @@ type RootLayoutProps = Readonly<{ children: ReactNode }>;
 const DashLayout = ({ children }: RootLayoutProps) => {
   return (
     <div className='layout mt-8 flex'>
-      <Sidebar className='w-1/4' />
-      <div className='w-3/4'>{children}</div>
+      <Sidebar className='hidden w-1/4 lg:block' />
+      <div className='w-full lg:w-3/4'>{children}</div>
     </div>
   );
 };
