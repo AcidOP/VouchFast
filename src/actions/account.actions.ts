@@ -3,6 +3,7 @@
 import { db } from '@/drizzle/db';
 import { user } from '@/drizzle/schema';
 import { eq } from 'drizzle-orm';
+import { updateTag } from 'next/cache';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -54,6 +55,11 @@ export const deleteAccountAction = async () => {
   if (!currentUser) {
     throw new Error('Unauthorized');
   }
+
+  // Invalidate all user caches before deletion
+  updateTag(`dashboard:${currentUser.id}`);
+  updateTag(`lists:${currentUser.id}`);
+  updateTag(`testimonial-count:${currentUser.id}`);
 
   await db.transaction(async tx => {
     await tx.delete(user).where(eq(user.id, currentUser.id));
