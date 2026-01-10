@@ -18,51 +18,89 @@ const testimonialSchema = z.object({
   content: z.string().min(10).max(2000),
 });
 
+// export const createTestimonialAction = async (input: unknown) => {
+//   const data = testimonialSchema.parse(input);
+
+//   const res = await db
+//     .select({
+//       listId: list.id,
+//       userId: list.userId,
+//       plan: user.plan,
+//     })
+//     .from(list)
+//     .innerJoin(user, eq(user.id, list.userId))
+//     .where(eq(list.id, data.listId))
+//     .limit(1);
+
+//   if (!res[0]) {
+//     throw new Error('Invalid list');
+//   }
+
+//   const { userId, listId, plan } = res[0];
+
+//   // 🔹 Count testimonials for this list
+//   const [{ total }] = await db
+//     .select({ total: count(testimonial.id) })
+//     .from(testimonial)
+//     .where(eq(testimonial.listId, listId));
+
+//   const limit = PLAN_LIMITS[plan].testimonialLimit;
+//   if (total >= limit) {
+//     throw new Error(
+//       `Your current plan allows a maximum of ${limit} testimonials per list.`,
+//     );
+//   }
+
+//   await db.insert(testimonial).values({
+//     id: crypto.randomUUID(),
+//     listId,
+//     authorName: data.authorName,
+//     authorTitle: data.authorTitle,
+//     authorCompany: data.authorCompany,
+//     content: data.content,
+//   });
+
+//   updateTag(`list:${listId}`);
+//   updateTag(`dashboard:${userId}`);
+//   updateTag(`testimonial-count:${userId}`);
+// };
+
 export const createTestimonialAction = async (input: unknown) => {
   const data = testimonialSchema.parse(input);
 
-  const res = await db
-    .select({
-      listId: list.id,
-      userId: list.userId,
-      plan: user.plan,
-    })
-    .from(list)
-    .innerJoin(user, eq(user.id, list.userId))
-    .where(eq(list.id, data.listId))
-    .limit(1);
+  const result = await db.transaction(async tx => {
+    const listInfo = await tx
+      .select({
+        listId: list.id,
+        userId: list.userId,
+        plan: user.plan,
+        currentCount: count(testimonial.id),
+      })
+      .from(list)
+      .innerJoin(user, eq(user.id, list.userId))
+      .leftJoin(testimonial, eq(testimonial.listId, list.id))
+      .where(eq(list.id, data.listId))
+      .groupBy(list.id, user.id)
+      .limit(1);
 
-  if (!res[0]) {
-    throw new Error('Invalid list');
-  }
+    if (!listInfo[0]) throw new Error('Invalid list');
 
-  const { userId, listId, plan } = res[0];
+    const { userId, listId, plan, currentCount } = listInfo[0];
+    const limit = PLAN_LIMITS[plan].testimonialLimit;
 
-  // 🔹 Count testimonials for this list
-  const [{ total }] = await db
-    .select({ total: count(testimonial.id) })
-    .from(testimonial)
-    .where(eq(testimonial.listId, listId));
+    if (currentCount >= limit) {
+      throw new Error(`Maximum ${limit} testimonials per list.`);
+    }
 
-  const limit = PLAN_LIMITS[plan].testimonialLimit;
-  if (total >= limit) {
-    throw new Error(
-      `Your current plan allows a maximum of ${limit} testimonials per list.`,
-    );
-  }
+    await tx.insert(testimonial).values({ id: crypto.randomUUID(), ...data });
 
-  await db.insert(testimonial).values({
-    id: crypto.randomUUID(),
-    listId,
-    authorName: data.authorName,
-    authorTitle: data.authorTitle,
-    authorCompany: data.authorCompany,
-    content: data.content,
+    return { userId, listId };
   });
 
-  updateTag(`list:${listId}`);
-  updateTag(`dashboard:${userId}`);
-  updateTag(`testimonial-count:${userId}`);
+  // Cache invalidation remains the same
+  updateTag(`list:${result.listId}`);
+  updateTag(`dashboard:${result.userId}`);
+  updateTag(`testimonial-count:${result.userId}`);
 };
 
 export const deleteTestimonialAction = async (testimonialId: string) => {
