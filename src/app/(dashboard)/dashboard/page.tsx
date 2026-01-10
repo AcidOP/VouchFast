@@ -1,10 +1,7 @@
 import { redirect } from 'next/navigation';
 
 import getUser from '@/actions/auth.user';
-import {
-  getListWithTestimonialCount,
-  getTotalTestimonialCount,
-} from '@/actions/list.actions';
+import { getDashboardData } from '@/actions/list.actions';
 
 import UserLists from '@/components/dashboard/lists';
 import DashboardOverview from '@/components/dashboard/overview';
@@ -18,17 +15,14 @@ const DashboardPage = async () => {
     redirect('/login');
   }
 
-  const [lists, testimonialCount] = await Promise.all([
-    getListWithTestimonialCount(user.id),
-    getTotalTestimonialCount(user.id),
-  ]);
+  const { lists, totalCount } = await getDashboardData(user.id);
 
   return (
     <Container className='space-y-16'>
       <DashboardOverview
         plan={user.plan as Plan}
         listCount={lists.length}
-        testimonialCount={testimonialCount}
+        testimonialCount={totalCount}
       />
       <UserLists lists={lists} />
     </Container>

@@ -122,6 +122,36 @@ export const getListWithTestimonials = async (listId: string, userId: string) =>
     },
   )();
 
+export const getDashboardData = async (userId: string) =>
+  unstable_cache(
+    async () => {
+      const lists = await db
+        .select({
+          id: list.id,
+          name: list.name,
+          createdAt: list.createdAt,
+          testimonialCount: count(testimonial.id),
+        })
+        .from(list)
+        .leftJoin(testimonial, eq(testimonial.listId, list.id))
+        .where(eq(list.userId, userId))
+        .groupBy(list.id)
+        .orderBy(list.createdAt);
+
+      const totalCount = lists.reduce((sum, l) => sum + l.testimonialCount, 0);
+
+      return { lists, totalCount };
+    },
+    [`dashboard:${userId}`],
+    {
+      tags: [
+        `dashboard:${userId}`,
+        `lists:${userId}`,
+        `testimonial-count:${userId}`,
+      ],
+    },
+  )();
+
 export const getListWithTestimonialCount = async (userId: string) =>
   unstable_cache(
     async () => {
