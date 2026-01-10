@@ -38,9 +38,7 @@ const EditTestimonialButton = ({ testimonial }: IProps) => {
 
   const updateTestimonial = () => {
     startTransition(async () => {
-      const result = await editTestimonialAction(testimonial.id, {
-        content: text,
-      });
+      const result = await editTestimonialAction(testimonial.id, { content: text });
 
       toast({
         title: result.success ? 'Updated' : 'Error',

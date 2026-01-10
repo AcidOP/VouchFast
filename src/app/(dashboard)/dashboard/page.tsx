@@ -1,8 +1,11 @@
+import { Suspense } from 'react';
+
 import { redirect } from 'next/navigation';
 
 import getUser from '@/actions/auth.user';
 import { getDashboardData } from '@/actions/list.actions';
 
+import { ListSkeleton } from '@/components/dashboard/list-skeleton';
 import UserLists from '@/components/dashboard/lists';
 import DashboardOverview from '@/components/dashboard/overview';
 import Container from '@/components/layout/container';
@@ -24,8 +27,20 @@ const DashboardPage = async () => {
         listCount={lists.length}
         testimonialCount={totalCount}
       />
-      <UserLists lists={lists} />
+
+      <Suspense fallback={<ListGridSkeleton />}>
+        <UserLists lists={lists} />
+      </Suspense>
     </Container>
+  );
+};
+
+const ListGridSkeleton = () => {
+  return (
+    <div className='grid gap-6 sm:grid-cols-2'>
+      <ListSkeleton />
+      <ListSkeleton />
+    </div>
   );
 };
 
