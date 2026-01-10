@@ -23,6 +23,7 @@ export const list = pgTable(
       .notNull(),
   },
   table => [
+    index('list_userId_createdAt_idx').on(table.userId, table.createdAt),
     index('list_userId_idx').on(table.userId),
     index('list_createdAt_idx').on(table.createdAt),
   ],

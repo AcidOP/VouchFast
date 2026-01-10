@@ -37,6 +37,7 @@ export const testimonial = pgTable(
     createdAt: timestamp('created_at').defaultNow().notNull(),
   },
   table => [
+    index('testimonial_listId_createdAt_idx').on(table.listId, table.createdAt),
     index('testimonial_listId_idx').on(table.listId),
     index('testimonial_status_idx').on(table.status),
     index('testimonial_list_status_created_idx').on(
