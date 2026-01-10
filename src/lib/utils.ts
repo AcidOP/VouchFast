@@ -51,7 +51,6 @@ export const downloadJson = (data: JsonData, filename: string = 'data.json') => 
     .replace(/\\n/g, '')
     .replace(/\\r/g, '')
     .replace(/\\t/g, '')
-    .replace(/\\/g, '')
     .replace(/\s+/g, ' ')
     .trim();
 
