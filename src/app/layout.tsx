@@ -11,9 +11,7 @@ import Toaster from '@/components/ui/toast/toast-host';
 
 import type { ReactNode } from 'react';
 
-type RootLayoutProps = Readonly<{ children: ReactNode }>;
-
-const RootLayout = ({ children }: RootLayoutProps) => {
+const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
   return (
     <html lang='en'>
       <body className={cn(jakarta.variable, grotesque.variable, 'antialiased')}>
