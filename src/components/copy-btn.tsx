@@ -18,7 +18,7 @@ const CopyButton = ({ text, className }: IProps) => {
   return (
     <Button
       onClick={() => void handleCopy(text)}
-      type='submit'
+      type='button'
       variant='ghost'
       className={cn('px-2', className)}
     >

@@ -33,20 +33,16 @@ const DeleteTestimonial = ({ testimonialId }: IProps) => {
       try {
         const result = await deleteTestimonialAction(testimonialId);
 
-        if (!result.success) {
-          throw new Error(result.message);
-        }
-
         toast({
           title: 'Testimonial deleted',
-          description: 'The testimonial has been removed.',
+          description: result.message,
         });
 
         setOpen(false);
-      } catch (err) {
+      } catch (_err) {
         toast({
           title: 'Deletion failed',
-          description: err instanceof Error ? err.message : 'Something went wrong',
+          description: 'Something went wrong. Please try again later.',
           variant: 'destructive',
         });
       }
