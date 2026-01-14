@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 'use server';
 
-import { db } from '@/drizzle/db';
-import { list, testimonial, user } from '@/drizzle/schema';
+import { db } from '@/db/db';
+import { list, testimonial, user } from '@/db/schema';
 import { and, count, desc, eq } from 'drizzle-orm';
 import { unstable_cache, updateTag } from 'next/cache';
 import { redirect } from 'next/navigation';

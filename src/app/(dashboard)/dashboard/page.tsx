@@ -10,7 +10,7 @@ import UserLists from '@/components/dashboard/lists';
 import DashboardOverview from '@/components/dashboard/overview';
 import Container from '@/components/layout/container';
 
-import type { Plan } from '@/drizzle/schema';
+import type { Plan } from '@/db/schema';
 
 const DashboardPage = async () => {
   const user = await getUser();

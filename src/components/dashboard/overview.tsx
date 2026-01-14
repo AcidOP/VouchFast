@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import Heading from '@/components/dashboard-heading';
 import OverviewCard from '@/components/dashboard/overview-card';
 
-import type { Plan } from '@/drizzle/schema';
+import type { Plan } from '@/db/schema';
 
 interface IProps {
   plan: Plan;

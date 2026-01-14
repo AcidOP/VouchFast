@@ -1,7 +1,7 @@
 'use server';
 
-import { db } from '@/drizzle/db';
-import { user } from '@/drizzle/schema';
+import { db } from '@/db/db';
+import { user } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { updateTag } from 'next/cache';
 import { headers } from 'next/headers';

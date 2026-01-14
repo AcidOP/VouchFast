@@ -1,5 +1,5 @@
-import { db } from '@/drizzle/db';
-import { DEFAULT_PLAN } from '@/drizzle/schema';
+import { db } from '@/db/db';
+import { DEFAULT_PLAN } from '@/db/schema';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { nextCookies } from 'better-auth/next-js';

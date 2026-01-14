@@ -1,4 +1,4 @@
-import type { Plan } from '@/drizzle/schema';
+import type { Plan } from '@/db/schema';
 
 type PlanLimits = {
   listLimit: number;

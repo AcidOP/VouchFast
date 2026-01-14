@@ -1,7 +1,7 @@
 'use server';
 
-import { db } from '@/drizzle/db';
-import { list, testimonial, user } from '@/drizzle/schema';
+import { db } from '@/db/db';
+import { list, testimonial, user } from '@/db/schema';
 import { and, count, eq, exists } from 'drizzle-orm';
 import { updateTag } from 'next/cache';
 import z from 'zod';
