@@ -1,0 +1,1 @@
+ALTER TABLE "list" ADD COLUMN "default_testimonial_status" text DEFAULT 'APPROVED' NOT NULL;

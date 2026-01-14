@@ -1,6 +1,6 @@
 {
-  "id": "144f6e53-d110-4298-bc0d-67d20a92f621",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "12a3ae1e-3623-441f-894a-bd0d5f19faed",
+  "prevId": "955c2236-12c3-436f-95ee-aa7a1d165b22",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -383,6 +383,13 @@
           "primaryKey": false,
           "notNull": true
         },
+        "default_testimonial_status": {
+          "name": "default_testimonial_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'APPROVED'"
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -643,7 +650,7 @@
     "public.testimonial_status": {
       "name": "testimonial_status",
       "schema": "public",
-      "values": ["PENDING", "APPROVED", "REJECTED"]
+      "values": ["PENDING", "APPROVED"]
     }
   },
   "schemas": {},

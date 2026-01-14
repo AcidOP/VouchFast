@@ -4,7 +4,10 @@ import { createListAction } from '@/actions/list.actions';
 
 import { cn } from '@/lib/utils';
 
+import TestimonialApprovalToggle from '@/components/lists/create/testimonial-approval-toggle';
+
 import Button from '@/components/ui/button';
+import Input from '@/components/ui/input';
 
 import type { NewListFormState } from '@/components/lists/create/new-list.client';
 
@@ -40,8 +43,7 @@ const ListForm = ({ value, onChange }: Props) => {
         <h2 className='mb-6 text-xl font-semibold'>Create a new list</h2>
 
         <div className='space-y-4'>
-          <input
-            className='w-full rounded border p-2'
+          <Input
             placeholder='List name (visible in your dashboard)'
             value={value.listName}
             onChange={e => onChange({ ...value, listName: e.target.value })}
@@ -53,6 +55,13 @@ const ListForm = ({ value, onChange }: Props) => {
             rows={4}
             value={value.inviteMessage}
             onChange={e => onChange({ ...value, inviteMessage: e.target.value })}
+          />
+
+          <TestimonialApprovalToggle
+            value={value.defaultTestimonialState}
+            onChange={status =>
+              onChange({ ...value, defaultTestimonialState: status })
+            }
           />
         </div>
 

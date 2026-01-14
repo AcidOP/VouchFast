@@ -15,6 +15,10 @@ export const list = pgTable(
 
     name: text('name').notNull(),
     message: text('message').notNull(),
+    defaultTestimonialStatus: text('default_testimonial_status')
+      .$type<'APPROVED' | 'PENDING'>()
+      .notNull()
+      .default('APPROVED'),
 
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at')

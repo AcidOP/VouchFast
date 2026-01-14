@@ -205,6 +205,7 @@ export const createListAction = async (listInfo: NewListFormState) => {
 
   const name = listInfo.listName.trim();
   const message = listInfo.inviteMessage.trim();
+  const defaultTestimonialStatus = listInfo.defaultTestimonialState;
 
   validateListInput(name, message);
 
@@ -224,6 +225,7 @@ export const createListAction = async (listInfo: NewListFormState) => {
       userId: user.id,
       name,
       message,
+      defaultTestimonialStatus,
     });
   });
 

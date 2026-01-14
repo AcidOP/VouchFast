@@ -5,14 +5,18 @@ import { useState } from 'react';
 import ListForm from '@/components/lists/create/list-form';
 import InvitePreview from '@/components/lists/invite-form-preview';
 
+import type { TestimonialStatus } from '@/db/schema';
+
 export type NewListFormState = {
   listName: string;
   inviteMessage: string;
+  defaultTestimonialState: TestimonialStatus;
 };
 
 const DEFAULT_STATES = {
   listName: '',
   inviteMessage: "Hey! I'd love a short testimonial about our work together.",
+  defaultTestimonialState: 'APPROVED' as TestimonialStatus,
 };
 
 const NewListClient = () => {
