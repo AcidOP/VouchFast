@@ -4,7 +4,7 @@ import { createListAction } from '@/actions/list.actions';
 
 import { cn } from '@/lib/utils';
 
-import TestimonialApprovalToggle from '@/components/lists/create/testimonial-approval-toggle';
+import TestimonialApprovalToggle from '@/components/lists/testimonial-approval-toggle';
 
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/input';

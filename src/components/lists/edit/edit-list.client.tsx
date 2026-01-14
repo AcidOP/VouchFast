@@ -5,21 +5,26 @@ import { useState } from 'react';
 import ListForm from '@/components/lists/edit/form';
 import InvitePreview from '@/components/lists/invite-form-preview';
 
+import type { TestimonialStatus } from '@/db/schema';
+
 export type ListFormState = {
   listName: string;
   inviteMessage: string;
+  defaultTestimonialState: TestimonialStatus;
 };
 
 interface IProps {
   id: string;
   name: string;
   message: string;
+  defaultTestimonialState: TestimonialStatus;
 }
 
 const EditListClient = (list: IProps) => {
   const [state, setState] = useState<ListFormState>({
     listName: list.name,
     inviteMessage: list.message,
+    defaultTestimonialState: list.defaultTestimonialState,
   });
 
   return (

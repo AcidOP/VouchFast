@@ -58,6 +58,7 @@ export const getEditableListById = async (listId: string, userId: string) => {
       name: list.name,
       message: list.message,
       createdAt: list.createdAt,
+      defaultTestimonialState: list.defaultTestimonialStatus,
     })
     .from(list)
     .where(and(eq(list.id, listId), eq(list.userId, userId)))
@@ -239,12 +240,13 @@ export const updateListAction = async (listId: string, listInfo: ListFormState) 
 
   const name = listInfo.listName.trim();
   const message = listInfo.inviteMessage.trim();
+  const defaultTestimonialStatus = listInfo.defaultTestimonialState;
 
   validateListInput(name, message);
 
   const res = await db
     .update(list)
-    .set({ name, message })
+    .set({ name, message, defaultTestimonialStatus })
     .where(and(eq(list.id, listId), eq(list.userId, user.id)))
     .returning({ id: list.id, name: list.name });
 
