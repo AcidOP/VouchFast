@@ -1,1 +1,0 @@
-ALTER TABLE "list" RENAME COLUMN "description" TO "message";
