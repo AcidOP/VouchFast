@@ -85,7 +85,7 @@ export const getListWithTestimonials = async (listId: string, userId: string) =>
           authorTitle: testimonial.authorTitle,
           authorCompany: testimonial.authorCompany,
           content: testimonial.content,
-          rating: testimonial.rating,
+          // rating: testimonial.rating,
           status: testimonial.status,
           createdAt: testimonial.createdAt,
         })
@@ -111,7 +111,7 @@ export const getListWithTestimonials = async (listId: string, userId: string) =>
             authorTitle: r.authorTitle,
             authorCompany: r.authorCompany,
             content: r.content!,
-            rating: r.rating,
+            // rating: r.rating,
             status: r.status!,
             createdAt: r.createdAt!,
           })),

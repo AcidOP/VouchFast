@@ -24,7 +24,7 @@ interface IProps {
     authorTitle: string | null;
     authorCompany: string | null;
     content: string;
-    rating: number | null;
+    // rating: number | null;
     status: 'PENDING' | 'APPROVED' | 'REJECTED';
     createdAt: Date;
   };
