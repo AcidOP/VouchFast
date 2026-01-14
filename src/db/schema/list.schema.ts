@@ -5,6 +5,8 @@ import { user } from './auth.schema';
 // eslint-disable-next-line import/no-cycle
 import { testimonial } from './testimonial.schema';
 
+import type { TestimonialStatus } from './testimonial.schema';
+
 export const list = pgTable(
   'list',
   {
@@ -16,7 +18,7 @@ export const list = pgTable(
     name: text('name').notNull(),
     message: text('message').notNull(),
     defaultTestimonialStatus: text('default_testimonial_status')
-      .$type<'APPROVED' | 'PENDING'>()
+      .$type<TestimonialStatus>()
       .notNull()
       .default('APPROVED'),
 
